@@ -1,5 +1,6 @@
 package com.ocms.onlinecoursemanagement.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,17 +12,23 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String name;
 
     @Column(unique = true, nullable = false)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String email;
 
     @Column(nullable = false)
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    @Schema(hidden = true)
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Role role;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime createdAt;
 
     public User() {

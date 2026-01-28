@@ -10,6 +10,7 @@ import Checkout from './pages/Checkout';
 import MyCourses from './pages/MyCourses';
 import InstructorDashboard from './pages/InstructorDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import InstructorAccess from './pages/InstructorAccess';
 
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -23,11 +24,12 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/instructor" element={<InstructorAccess />} />
+            <Route path="/instructor-dashboard" element={<ProtectedRoute allowedRoles={['INSTRUCTOR', 'ADMIN']}><InstructorDashboard /></ProtectedRoute>} />
             <Route path="/courses" element={<CourseListing />} />
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/checkout/:courseId" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/my-courses" element={<ProtectedRoute><MyCourses /></ProtectedRoute>} />
-            <Route path="/instructor-dashboard" element={<ProtectedRoute allowedRoles={['INSTRUCTOR', 'ADMIN']}><InstructorDashboard /></ProtectedRoute>} />
             <Route path="/admin-dashboard" element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} />
           </Routes>
         </div>

@@ -66,13 +66,6 @@ const Signup = () => {
                                         required
                                     />
                                 </div>
-                                <div className="mb-4">
-                                    <label className="form-label">Register as</label>
-                                    <select name="role" className="form-select" onChange={handleChange}>
-                                        <option value="STUDENT">Student</option>
-                                        <option value="INSTRUCTOR">Instructor</option>
-                                    </select>
-                                </div>
                                 <button type="submit" className="btn btn-primary w-100 mb-3">Signup</button>
                             </form>
                             <p className="text-center mb-0">

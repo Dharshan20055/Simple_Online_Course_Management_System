@@ -39,6 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @PostConstruct
     public void init() {
+        System.out.println("Initializing Stripe with key: " + stripeSecretKey.substring(0, 7) + "...");
         Stripe.apiKey = stripeSecretKey;
     }
 
@@ -46,6 +47,12 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentIntent createPaymentIntent(Long courseId, Long userId) throws StripeException {
         Course course = courseService.getCourseById(courseId);
         User user = userService.getUserById(userId);
+
+        System.out.println("Creating PaymentIntent for course: " + courseId + ", price: " + course.getPrice());
+
+        if (course.getPrice() == null) {
+            throw new RuntimeException("Course price is missing");
+        }
 
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                 .setAmount((long) (course.getPrice() * 100)) // Amount in cents
@@ -55,6 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
         PaymentIntent intent = PaymentIntent.create(params);
+        System.out.println("PaymentIntent created: " + intent.getId());
 
         // Pre-save payment as PENDING
         Payment payment = Payment.builder()

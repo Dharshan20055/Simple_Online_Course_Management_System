@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const InstructorDashboard = () => {
     const [courses, setCourses] = useState([]);
@@ -11,15 +12,20 @@ const InstructorDashboard = () => {
         published: true
     });
     const { user, token } = useSelector(state => state.auth);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchCourses();
-    }, [user.id, token]);
+        if (user && user.id) {
+            fetchCourses();
+        }
+    }, [user, token]);
 
     const fetchCourses = () => {
+        if (!user || !user.id) return;
         axios.get(`http://localhost:8080/api/courses/instructor/${user.id}`, {
             headers: { Authorization: `Bearer ${token}` }
-        }).then(res => setCourses(res.data));
+        }).then(res => setCourses(res.data))
+            .catch(err => console.error("Error fetching instructor courses:", err));
     };
 
     const handleAddCourse = async (e) => {
@@ -63,7 +69,12 @@ const InstructorDashboard = () => {
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2 className="fw-bold">Instructor Dashboard</h2>
+                <div className="d-flex align-items-center gap-3">
+                    <button className="btn btn-outline-secondary" onClick={() => navigate('/login')}>
+                        <i className="bi bi-arrow-left me-2"></i>Back to Login
+                    </button>
+                    <h2 className="fw-bold mb-0">Instructor Dashboard</h2>
+                </div>
                 <button className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
                     {showForm ? 'Cancel' : 'Add New Course'}
                 </button>

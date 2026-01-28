@@ -57,6 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(User user) {
+        if (user.getRole() == null) {
+            user.setRole(com.ocms.onlinecoursemanagement.entity.Role.STUDENT);
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
